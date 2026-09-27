@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TubeBrain AI – YouTube Niche Finder, Channel Analyzer & Automation</title>
+    <meta name="description" content="TubeBrain AI – Smart YouTube tools: Niche Finder, Channel Analyzer, Transcript Extractor, Video Analysis & Automation Guide. Download the Android APK now.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ff0000;
+            --primary-dark: #cc0000;
+            --accent: #00f0ff;
+            --bg: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --text: #ffffff;
+            --text-muted: #a0a0b0;
+            --border: #2a2a3a;
+            --gradient: linear-gradient(135deg, #ff0000 0%, #ff4d4d 50%, #00f0ff 100%);
+            --gradient-soft: linear-gradient(135deg, rgba(255,0,0,0.15) 0%, rgba(0,240,255,0.1) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background effects */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% -10%, rgba(255,0,0,0.18) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,240,255,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 30% at 50% 100%, rgba(255,0,0,0.08) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== NAVBAR ========== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 0;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 12px 0;
+            background: rgba(10, 10, 15, 0.95);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(255, 0, 0, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--text-muted);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1.05rem;
+            border-radius: 14px;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(255,0,0,0.12);
+            border: 1px solid rgba(255,0,0,0.25);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: #ff6b6b;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .badge span {
+            width: 8px;
+            height: 8px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 620px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ========== FEATURES ========== */
+        .section {
+            padding: 90px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 540px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            background: var(--gradient-soft);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
+        /* ========== HOW IT WORKS ========== */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 32px;
+            counter-reset: step;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 52px;
+            height: 52px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin: 0 auto 18px;
+            color: white;
+        }
+
+        .step h3 {
+            font-size: 1.15rem;
+            margin-bottom: 8px;
+        }
+
+        .step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ========== DOWNLOAD SECTION ========== */
+        .download-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 56px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,0,0,0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .download-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.7rem, 4vw, 2.3rem);
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .download-section > p {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            position: relative;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            position: relative;
+        }
+
+        .apk-note {
+            margin-top: 24px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            position: relative;
+        }
+
+        /* ========== CONTACT ========== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 28px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            border-color: rgba(255,255,255,0.12);
+            transform: translateY(-4px);
+        }
+
+        .contact-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+        }
+
+        .contact-card.whatsapp .contact-icon {
+            background: rgba(37, 211, 102, 0.15);
+        }
+
+        .contact-card.email .contact-icon {
+            background: rgba(0, 240, 255, 0.12);
+        }
+
+        .contact-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 48px 0 32px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 130px 0 70px;
+            }
+
+            .hero-stats {
+                gap: 28px;
+            }
+
+            .download-section {
+                padding: 40px 24px;
+            }
+
+            .section {
+                padding: 70px 0;
+            }
+        }
+
+        /* Mobile menu button (simple) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">🧠</div>
+                TubeBrain AI
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#download">Download</a>
+                <a href="#contact">Contact</a>
+                <a href="#download" class="btn btn-primary">Get APK</a>
+            </div>
+            <button class="menu-toggle" onclick="document.querySelector('.nav-links').style.display = document.querySelector('.nav-links').style.display === 'flex' ? 'none' : 'flex'">☰</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">
+                <span></span>
+                Android App Available Now
+            </div>
+            <h1>
+                Supercharge Your<br>
+                <span class="gradient-text">YouTube Growth</span>
+            </h1>
+            <p>
+                TubeBrain AI helps creators find profitable niches, analyze channels, extract transcripts, study videos, and automate their workflow — all in one powerful Android app.
+            </p>
+            <div class="hero-buttons">
+                <a href="#download" class="btn btn-primary btn-lg">
+                    ⬇ Download APK
+                </a>
+                <a href="https://wa.me/923091370220" target="_blank" class="btn btn-whatsapp btn-lg">
+                    💬 Join WhatsApp
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">5+</div>
+                    <div class="stat-label">Powerful Tools</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">AI</div>
+                    <div class="stat-label">Powered Insights</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Free</div>
+                    <div class="stat-label">To Download</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need to Grow on YouTube</h2>
+                <p>Powerful AI tools designed for creators, marketers, and agencies.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Niche Finder</h3>
+                    <p>Discover high-potential, low-competition YouTube niches with AI-powered research. Find topics that actually convert into subscribers and views.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Channel Analyzer</h3>
+                    <p>Deep dive into any YouTube channel. Analyze growth, content strategy, posting frequency, and performance metrics in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Transcript Extractor</h3>
+                    <p>Extract accurate transcripts from any YouTube video instantly. Perfect for content research, repurposing, and SEO.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎬</div>
+                    <h3>Video Analysis</h3>
+                    <p>Break down top-performing videos. Understand hooks, structure, retention patterns, and what makes content go viral.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Automation Guide</h3>
+                    <p>Step-by-step automation strategies to scale your YouTube channel faster without burning out.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>All-in-One App</h3>
+                    <p>Everything in one clean Android app. No need to jump between websites or tools. Download once and grow faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how-it-works" style="background: rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Get started in under 2 minutes.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Download the APK</h3>
+                    <p>Click the download button and install TubeBrain AI on your Android device.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Open & Explore</h3>
+                    <p>Launch the app and choose the tool you need — Niche Finder, Analyzer, and more.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Grow Faster</h3>
+                    <p>Use AI insights to create better content, find winning niches, and automate your growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="section" id="download">
+        <div class="container">
+            <div class="download-section">
+                <h2>Download TubeBrain AI</h2>
+                <p>Get the latest Android APK and start growing your YouTube channel today.</p>
+                <div class="download-buttons">
+                    <a href="TubeBrain-AI.apk" class="btn btn-primary btn-lg" download>
+                        ⬇ Download APK
+                    </a>
+                    <a href="https://wa.me/923091370220?text=Hi%2C%20I%20want%20to%20download%20TubeBrain%20AI" target="_blank" class="btn btn-whatsapp btn-lg">
+                        💬 Get Help on WhatsApp
+                    </a>
+                </div>
+                <p class="apk-note">
+                    Compatible with Android 8.0 and above • Safe & secure download
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get in Touch</h2>
+                <p>Questions? Need support? We're here to help.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-card whatsapp">
+                    <div class="contact-icon">💬</div>
+                    <h3>WhatsApp</h3>
+                    <p>Chat with us directly for support, updates, and community access.</p>
+                    <a href="https://wa.me/923091370220" target="_blank" class="btn btn-whatsapp">
+                        Join on WhatsApp
+                    </a>
+                    <p style="margin-top: 14px; font-size: 0.9rem; color: var(--text-muted);">
+                        +92 309 1370220
+                    </p>
+                </div>
+                <div class="contact-card email">
+                    <div class="contact-icon">✉️</div>
+                    <h3>Email Us</h3>
+                    <p>Prefer email? Send us your questions and we'll reply as soon as possible.</p>
+                    <a href="mailto:support@tubebrain.ai" class="btn btn-outline">
+                        support@tubebrain.ai
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-logo">
+                    <div class="logo-icon" style="width:32px;height:32px;font-size:1rem;">🧠</div>
+                    TubeBrain AI
+                </div>
+                <div class="footer-links">
+                    <a href="#features">Features</a>
+                    <a href="#download">Download</a>
+                    <a href="#contact">Contact</a>
+                    <a href="https://wa.me/923091370220" target="_blank">WhatsApp</a>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 TubeBrain AI. All rights reserved. Made for YouTube creators.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 40) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
